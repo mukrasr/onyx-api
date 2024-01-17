@@ -22,6 +22,7 @@ services:
       target: integrationtestrunner
     environment:
       API_PATH: http://api
+      JWT_TOKEN: ${JWT_TOKEN}
     depends_on:
       api:
         condition: service_healthy
