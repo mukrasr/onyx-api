@@ -1,32 +1,32 @@
 version: "3.7"
 services:
   api:
-    build: 
+    build:
       context: ./source
       dockerfile: Dockerfile
       target: final
     ports:
-      - 5271:5271
+      - 5271:80
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://localhost:5271
+      ASPNETCORE_URLS: http://+:80
     healthcheck:
-      test: curl --fail http://localhost:5271 || exit 1
+      test: curl --fail http://localhost || exit 1
       interval: 5s
       timeout: 5s
       retries: 5
   integrationtests:
-    build: 
+    build:
       context: ./source
       dockerfile: Dockerfile
       target: integrationtestrunner
     environment:
-      API_PATH: http://api:5271
+      API_PATH: http://api
     depends_on:
       api:
         condition: service_healthy
   unittests:
-    build: 
+    build:
       context: ./source
       dockerfile: Dockerfile
       target: unittestrunner
