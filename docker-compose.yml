@@ -2,7 +2,7 @@ version: "3.7"
 services:
   api:
     build:
-      context: ./source
+      context: .
       dockerfile: Dockerfile
       target: final
     ports:
@@ -19,17 +19,18 @@ services:
       - ~/.microsoft/:/root/.microsoft
   integrationtests:
     build:
-      context: ./source
+      context: .
       dockerfile: Dockerfile
       target: integrationtestrunner
     environment:
       API_PATH: http://api:5271
-      JWT_TOKEN: ${JWT_TOKEN}
     depends_on:
       api:
         condition: service_healthy
+    volumes:
+      - ~/.microsoft/:/root/.microsoft
   unittests:
     build:
-      context: ./source
+      context: .
       dockerfile: Dockerfile
       target: unittestrunner

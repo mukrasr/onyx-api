@@ -1,16 +1,10 @@
 # Onyx Api
 
-The tests that validate this api can be run either via docker compose or directly.
+The tests that validate this api can be run either via docker compose or directly via the test projects.
 
-## Docker compose
+## Running tests via docker compose
 
-This is the recommended method. The pre-requisite to use this method docker. Firstly you need to create a JWT token for the api and store it in a .env file as follows
-
-```bash
-echo JWT_TOKEN=$(cd source/Onyx.Api;dotnet user-jwts create --audience "http://localhost:5271" -o token) > .env
-```
-
-Once this is done, you can now run the tests
+This is the recommended method. The pre-requisite to use this method docker. Simply run as follows:
 
 ```bash
 docker compose up --build integrationtests unittests
@@ -18,7 +12,7 @@ docker compose up --build integrationtests unittests
 
 The rendered logs should provide the test results for both the integration and unit tests, after which the command should exit with code 0.
 
-## Directly
+## Running tests directly via project files
 
 The pre-requisite to use this method is dotnet 8. Run the intergration and unit tests as follows:
 

@@ -1,14 +1,14 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-COPY Onyx.Api Onyx.Api
+COPY source/Onyx.Api Onyx.Api
 RUN dotnet restore Onyx.Api
 
 # Unit test runner
 FROM build AS unittestrunner
 WORKDIR /src
 
-COPY Onyx.Api.UnitTests Onyx.Api.UnitTests
+COPY source/Onyx.Api.UnitTests Onyx.Api.UnitTests
 RUN dotnet restore Onyx.Api.UnitTests && \
     dotnet build --no-restore Onyx.Api.UnitTests
 CMD ["dotnet", "test", "Onyx.Api.UnitTests"]
@@ -17,10 +17,12 @@ CMD ["dotnet", "test", "Onyx.Api.UnitTests"]
 FROM build AS integrationtestrunner
 WORKDIR /src
 
-COPY Onyx.Api.IntegrationTests Onyx.Api.IntegrationTests
+COPY source/Onyx.Api.IntegrationTests Onyx.Api.IntegrationTests
+COPY scripts/run-integration-tests.sh .
 RUN dotnet restore Onyx.Api.IntegrationTests && \
-    dotnet build --no-restore Onyx.Api.IntegrationTests
-CMD ["dotnet", "test", "Onyx.Api.IntegrationTests"]
+    dotnet build --no-restore Onyx.Api.IntegrationTests && \
+    chmod +x run-integration-tests.sh
+CMD ["./run-integration-tests.sh"]
 
 # Publish
 FROM build AS publish
