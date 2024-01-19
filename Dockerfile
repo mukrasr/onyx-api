@@ -9,6 +9,7 @@ FROM build AS unittestrunner
 WORKDIR /src
 
 COPY source/Onyx.Api.UnitTests Onyx.Api.UnitTests
+COPY source/Onyx.Api Onyx.Api
 RUN dotnet restore Onyx.Api.UnitTests && \
     dotnet build --no-restore Onyx.Api.UnitTests
 CMD ["dotnet", "test", "Onyx.Api.UnitTests"]

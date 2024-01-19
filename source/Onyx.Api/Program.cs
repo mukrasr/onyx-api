@@ -1,14 +1,21 @@
-using System.Security.Claims;
+using Onyx.Api.Configs;
+using Onyx.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var services = builder.Services;
+var configuration = builder.Configuration;
+
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
 services.AddHealthChecks();
 services.AddAuthorization();
 services.AddAuthentication("Bearer").AddJwtBearer();
+services.AddControllers();
+
+services.Configure<ProductsConfig>(configuration.GetSection("ProductsConfig"));
+services.AddSingleton<IProductsService, ProductsService>();
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
@@ -21,7 +28,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.MapHealthChecks("/");
-app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
-    .RequireAuthorization();
+app.MapControllers();
 
 app.Run();
